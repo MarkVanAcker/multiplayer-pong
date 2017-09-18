@@ -8,7 +8,7 @@ public abstract class Entity {
     protected int id;
     protected boolean removed, changed;
 
-    public abstract void update();
+    public abstract void update(float deltaT);
 
     public Vector2 getPosition() {
         return position;
