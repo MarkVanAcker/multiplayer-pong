@@ -14,20 +14,21 @@ public class ClientGame implements Runnable{
     private Queue<EntityChangePositionPacket> queue;
 
 
-    public ClientGame() throws IOException {
+    public ClientGame(final String hostname ) throws IOException {
         client = new Client();
         clientprogram = new ClientProgram(this);
         client.addListener(clientprogram);
         client.start();
 
         Register.register(client);
-        client.connect(5000,"localhost",Register.port,Register.port);
+        client.connect(5000,hostname,Register.port,Register.port);
 
         new Thread(this).start();
     }
     @Override
     public void run() {
         this.update();
+
 
     }
 
