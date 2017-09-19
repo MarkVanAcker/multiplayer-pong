@@ -1,8 +1,9 @@
-package util;
+package server;
 
 import entity.Entity;
 import packets.EntityChangePositionPacket;
 import packets.InitEntityPacket;
+import packets.InitPlayerPacket;
 
 //singleton class
 public final class EntityConversion {
@@ -12,6 +13,15 @@ public final class EntityConversion {
 
     public static InitEntityPacket convertEntityToInitPacket(Entity e) {
         InitEntityPacket packet = new InitEntityPacket();
+        packet.position = e.getPosition();
+        packet.dimension = e.getDimension();
+        packet.id = e.getId();
+        //there should be a way to find the specific type of entity
+        return packet;
+    }
+
+    public static InitPlayerPacket convertPlayerToInitPacket(Entity e) {
+        InitPlayerPacket packet = new InitPlayerPacket();
         packet.position = e.getPosition();
         packet.dimension = e.getDimension();
         packet.id = e.getId();

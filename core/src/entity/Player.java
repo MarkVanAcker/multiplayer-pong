@@ -12,4 +12,9 @@ public class Player extends Entity {
     public void update(float deltaT) {
         changed = false;
     }
+
+    @Override
+    public String getTypeId() {
+        return "player";
+    }
 }

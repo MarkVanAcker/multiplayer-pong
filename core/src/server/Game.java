@@ -5,7 +5,6 @@ import com.esotericsoftware.kryonet.Connection;
 import entity.Ball;
 import entity.Player;
 import packets.*;
-import util.EntityConversion;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -41,15 +40,17 @@ public class Game implements Runnable {
         idToPlayerConnection.put(player2.getId(), player1Connection);
 
         //send packets to players: should also be done somewhere else
-        InitEntityPacket player1Packet = EntityConversion.convertEntityToInitPacket(player1);
-        InitEntityPacket player2Packet = EntityConversion.convertEntityToInitPacket(player2);
+        InitPlayerPacket player1forSelfPacket = EntityConversion.convertPlayerToInitPacket(player1);
+        InitEntityPacket player1forOtherPacket = EntityConversion.convertEntityToInitPacket(player1);
+        InitEntityPacket player2forOtherPacket = EntityConversion.convertEntityToInitPacket(player2);
+        InitPlayerPacket player2forSelfPacket = EntityConversion.convertPlayerToInitPacket(player2);
         InitEntityPacket ballPacket = EntityConversion.convertEntityToInitPacket(ball);
 
-        player1Connection.sendTCP(player1Packet);
-        player1Connection.sendTCP(player2Packet);
+        player1Connection.sendTCP(player1forSelfPacket);
+        player1Connection.sendTCP(player2forOtherPacket);
         player1Connection.sendTCP(ballPacket);
-        player2Connection.sendTCP(player1Packet);
-        player2Connection.sendTCP(player2Packet);
+        player2Connection.sendTCP(player1forOtherPacket);
+        player2Connection.sendTCP(player2forSelfPacket);
         player2Connection.sendTCP(ballPacket);
 
         InitEndPacket endPacket = new InitEndPacket();

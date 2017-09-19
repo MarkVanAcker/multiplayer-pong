@@ -49,4 +49,6 @@ public abstract class Entity {
     public long getNextId() {
         return nextId++;
     }
+
+    public abstract String getTypeId();
 }
