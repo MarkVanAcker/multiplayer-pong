@@ -1,12 +1,10 @@
-import com.esotericsoftware.kryonet.Client;
+package client;
+
+import client.ClientGame;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import packets.EntityChangePositionPacket;
 import packets.InitEntityPacket;
-import util.Register;
-
-import java.io.IOException;
-import java.util.Queue;
 
 public class ClientProgram extends Listener {
 

@@ -1,3 +1,5 @@
+package client;
+
 import com.esotericsoftware.kryonet.Client;
 import packets.EntityChangePositionPacket;
 import util.Register;
@@ -12,7 +14,7 @@ public class ClientGame implements Runnable{
     private Queue<EntityChangePositionPacket> queue;
 
 
-    ClientGame() throws IOException {
+    public ClientGame() throws IOException {
         client = new Client();
         clientprogram = new ClientProgram(this);
         client.addListener(clientprogram);

@@ -1,5 +1,7 @@
 package com.mygdx.desktop;
 
+import client.ClientGame;
+
 import java.io.IOException;
 
 public class Main {
