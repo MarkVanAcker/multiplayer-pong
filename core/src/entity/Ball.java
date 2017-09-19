@@ -16,4 +16,8 @@ public class Ball extends Entity {
         position.add(velocity.scl(deltaT));
         changed = true;
     }
+
+    public String getTypeId() {
+        return "ball";
+    }
 }

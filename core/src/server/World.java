@@ -2,7 +2,6 @@ package server;
 
 import entity.Entity;
 import packets.EntityChangePositionPacket;
-import util.EntityConversion;
 
 import java.util.HashMap;
 
