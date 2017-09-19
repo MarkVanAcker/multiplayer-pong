@@ -1,7 +1,10 @@
 package com.mygdx.desktop;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 
+import client.ClientGame;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -16,57 +19,27 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import entityG.EntityG;
 
 public class Pong extends ApplicationAdapter {
-    private Texture dropImage;
-    private Texture bucketImage;
-    private Sound dropSound;
-    private Music rainMusic;
     private SpriteBatch batch;
     private OrthographicCamera camera;
-    private Rectangle bucket;
-    private Array<Rectangle> raindrops;
-    private long lastDropTime;
+    private ClientGame cg;
+
 
     @Override
     public void create() {
-        // load the images for the droplet and the bucket, 64x64 pixels each
-        dropImage = new Texture(Gdx.files.internal("droplet.png"));
-        bucketImage = new Texture(Gdx.files.internal("bucket.png"));
-
-        // load the drop sound effect and the rain background "music"
-        dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
-
-        // start the playback of the background music immediately
-        rainMusic.setLooping(true);
-        rainMusic.play();
 
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
         batch = new SpriteBatch();
+        try {
+            cg = new ClientGame("localhost");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        // create a Rectangle to logically represent the bucket
-        bucket = new Rectangle();
-        bucket.x = 800 / 2 - 64 / 2; // center the bucket horizontally
-        bucket.y = 20; // bottom left corner of the bucket is 20 pixels above the bottom screen edge
-        bucket.width = 64;
-        bucket.height = 64;
-
-        // create the raindrops array and spawn the first raindrop
-        raindrops = new Array<Rectangle>();
-        spawnRaindrop();
-    }
-
-    private void spawnRaindrop() {
-        Rectangle raindrop = new Rectangle();
-        raindrop.x = MathUtils.random(0, 800-64);
-        raindrop.y = 480;
-        raindrop.width = 64;
-        raindrop.height = 64;
-        raindrops.add(raindrop);
-        lastDropTime = TimeUtils.nanoTime();
     }
 
     @Override
@@ -81,10 +54,18 @@ public class Pong extends ApplicationAdapter {
         // tell the camera to update its matrices.
         camera.update();
 
+        ArrayList<EntityG> sprites = cg.getEntities();
+
         // tell the SpriteBatch to render in the
         // coordinate system specified by the camera.
         batch.setProjectionMatrix(camera.combined);
 
+        batch.begin();
+        for(EntityG entity : sprites){
+            batch.draw(entity.getTexture(),entity.getX(),entity.getY(),entity.getWidth(),entity.getHeight());
+        }
+        batch.end();
+        /*
         // begin a new batch and draw the bucket and
         // all drops
         batch.begin();
@@ -124,15 +105,12 @@ public class Pong extends ApplicationAdapter {
                 iter.remove();
             }
         }
+        */
     }
 
     @Override
     public void dispose() {
         // dispose of all the native resources
-        dropImage.dispose();
-        bucketImage.dispose();
-        dropSound.dispose();
-        rainMusic.dispose();
         batch.dispose();
     }
 }

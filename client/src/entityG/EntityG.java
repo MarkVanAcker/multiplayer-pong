@@ -5,8 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
-public abstract class EntityG extends Actor {
+public abstract class EntityG extends Rectangle {
 
     private Texture text;
     private long id;
@@ -22,9 +23,11 @@ public abstract class EntityG extends Actor {
 
     }
 
-    @Override
-    public void draw(Batch batch,float parentAlpha){
-        batch.draw(this.text,this.getX(),this.getY());
+    public Texture getTexture() {
+        return text;
     }
 
+    public long getId() {
+        return id;
+    }
 }

@@ -1,10 +1,13 @@
 package client;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.esotericsoftware.kryonet.Client;
+import entityG.EntityG;
 import packets.EntityChangePositionPacket;
 import util.Register;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Queue;
 
 public class ClientGame implements Runnable{
@@ -13,7 +16,9 @@ public class ClientGame implements Runnable{
     ClientProgram clientprogram;
     private Queue<EntityChangePositionPacket> queue;
 
-    //Stage stage;
+    ArrayList<EntityG> entities = new ArrayList<EntityG>();
+
+    EntityG player;
 
     public ClientGame(final String hostname ) throws IOException {
         client = new Client();
@@ -28,19 +33,7 @@ public class ClientGame implements Runnable{
     }
     @Override
     public void run() {
-        long sleeptime = 1000/60;
-        long prevTime = System.nanoTime();
-
-        while (true) {
-            update(((float)(System.nanoTime() - prevTime))/1000000000);
-            prevTime = System.nanoTime();
-
-            try {
-                Thread.sleep(sleeptime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        this.update();
 
 
     }
@@ -49,11 +42,11 @@ public class ClientGame implements Runnable{
         queue.add(e);
     }
 
-    public void update(float deltaT){
+    public void update(){
 
     }
 
-    /*
-    public Stage getStage(){}
-     */
+    public ArrayList<EntityG> getEntities() {
+        return entities;
+    }
 }
