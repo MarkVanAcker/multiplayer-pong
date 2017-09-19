@@ -30,12 +30,12 @@ public class Game implements Runnable {
     //creates the world and starts the game
     public void initGame(Connection player1Connection, Connection player2Connection) {
         //create all entities: should be done in a separate class later
-        Ball ball = new Ball(new Vector2(0.0f, 0.0f), new Vector2(30, 30), new Vector2(10.0f, 0.0f));
+        Ball ball = new Ball(new Vector2(0.0f, 0.0f), new Vector2(30, 30), new Vector2(10.0f, 0.0f), "ball");
         world.addEntity(ball);
-        Player player1 = new Player(new Vector2(-100.0f, 0.0f), new Vector2(20, 100));
+        Player player1 = new Player(new Vector2(-100.0f, 0.0f), new Vector2(20, 100), "player_1");
         world.addEntity(player1);
         idToPlayerConnection.put(player1.getId(), player1Connection);
-        Player player2 = new Player(new Vector2(100.0f, 0.0f), new Vector2(20, 100));
+        Player player2 = new Player(new Vector2(100.0f, 0.0f), new Vector2(20, 100), "player_2");
         world.addEntity(player2);
         idToPlayerConnection.put(player2.getId(), player1Connection);
 

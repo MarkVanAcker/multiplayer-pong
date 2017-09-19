@@ -9,15 +9,17 @@ public abstract class Entity {
     protected Vector2 position, dimension;
     protected final long id;
     protected boolean removed, changed;
+    protected String typeId;
 
     public Entity() {
         this.id = getNextId();
     }
 
-    public Entity(Vector2 position, Vector2 dimension) {
+    public Entity(Vector2 position, Vector2 dimension, String typeId) {
         this();
         this.position = position;
         this.dimension = dimension;
+        this.typeId = typeId;
     }
 
     public abstract void update(float deltaT);
@@ -50,5 +52,7 @@ public abstract class Entity {
         return nextId++;
     }
 
-    public abstract String getTypeId();
+    public String getTypeId() {
+        return typeId;
+    }
 }

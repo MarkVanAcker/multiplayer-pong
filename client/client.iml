@@ -17,5 +17,15 @@
       </library>
     </orderEntry>
     <orderEntry type="module" module-name="common" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx:1.9.6" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../../../gson/gson-2.2.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
