@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import packets.ClientConnectPacket;
+import packets.GameStartPacket;
 import packets.PlayerKeyboardPacket;
 import util.Register;
 
@@ -39,7 +40,7 @@ public class ServerProgram extends Listener {
 
         if (players.size() == 2) {
             //start the game
-            game.startGame(players.get(0), players.get(1));
+            game.initGame(players.get(0), players.get(1));
         }
     }
 
@@ -47,6 +48,8 @@ public class ServerProgram extends Listener {
     public void received(Connection connection, Object object) {
         if (object instanceof PlayerKeyboardPacket) {
             game.addPlayerKeyboardPacket((PlayerKeyboardPacket)object);
+        } else if (object instanceof GameStartPacket) {
+            game.incomingPlayerGameStartPacket();
         }
     }
 

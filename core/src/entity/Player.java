@@ -10,6 +10,6 @@ public class Player extends Entity {
 
     @Override
     public void update(float deltaT) {
-
+        changed = false;
     }
 }

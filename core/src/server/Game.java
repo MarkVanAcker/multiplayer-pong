@@ -2,12 +2,9 @@ package server;
 
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Server;
 import entity.Ball;
 import entity.Player;
-import packets.InitEndPacket;
-import packets.InitEntityPacket;
-import packets.PlayerKeyboardPacket;
+import packets.*;
 import util.EntityConversion;
 
 import java.util.*;
@@ -28,25 +25,25 @@ public class Game implements Runnable {
 
     public Game(ServerProgram serverProgram) {
         this.serverProgram = serverProgram;
-        world = new World();
+        world = new World(this);
     }
 
     //creates the world and starts the game
-    public void startGame(Connection player1Connection, Connection player2Connection) {
+    public void initGame(Connection player1Connection, Connection player2Connection) {
         //create all entities: should be done in a separate class later
         Ball ball = new Ball(new Vector2(0.0f, 0.0f), new Vector2(30, 30), new Vector2(10.0f, 0.0f));
         world.addEntity(ball);
-        Player player1 = new Player(new Vector2(-10.0f, 0.0f), new Vector2(20, 100));
+        Player player1 = new Player(new Vector2(-100.0f, 0.0f), new Vector2(20, 100));
         world.addEntity(player1);
         idToPlayerConnection.put(player1.getId(), player1Connection);
-        Player player2 = new Player(new Vector2(10.0f, 0.0f), new Vector2(20, 100));
+        Player player2 = new Player(new Vector2(100.0f, 0.0f), new Vector2(20, 100));
         world.addEntity(player2);
         idToPlayerConnection.put(player2.getId(), player1Connection);
 
         //send packets to players: should also be done somewhere else
-        InitEntityPacket player1Packet = EntityConversion.ConvertEntityToPacket(player1);
-        InitEntityPacket player2Packet = EntityConversion.ConvertEntityToPacket(player2);
-        InitEntityPacket ballPacket = EntityConversion.ConvertEntityToPacket(ball);
+        InitEntityPacket player1Packet = EntityConversion.convertEntityToInitPacket(player1);
+        InitEntityPacket player2Packet = EntityConversion.convertEntityToInitPacket(player2);
+        InitEntityPacket ballPacket = EntityConversion.convertEntityToInitPacket(ball);
 
         player1Connection.sendTCP(player1Packet);
         player1Connection.sendTCP(player2Packet);
@@ -59,10 +56,16 @@ public class Game implements Runnable {
         endPacket.succes = true;
         player1Connection.sendTCP(endPacket);
         player2Connection.sendTCP(endPacket);
+    }
 
-        //Start the game
-        new Thread(this).start();
-        running = true;
+    //starts the game
+    private int playersGameStartPackets = 0;
+    public void incomingPlayerGameStartPacket() {
+        playersGameStartPackets++;
+        if (playersGameStartPackets == 2) {
+            new Thread(this).start();
+            running = true;
+        }
     }
 
     public void addPlayerKeyboardPacket(PlayerKeyboardPacket packet) {
@@ -79,6 +82,14 @@ public class Game implements Runnable {
         }
 
         world.update(deltaT);
+    }
+
+    public void sendPacketToAllPlayersUDP(Packet packet) {
+        ServerProgram.server.sendToAllUDP(packet);
+    }
+
+    public void sendPacketToAllPlayersTCP(Packet packet) {
+        ServerProgram.server.sendToAllTCP(packet);
     }
 
     @Override

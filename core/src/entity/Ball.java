@@ -14,5 +14,6 @@ public class Ball extends Entity {
     @Override
     public void update(float deltaT) {
         position.add(velocity.scl(deltaT));
+        changed = true;
     }
 }

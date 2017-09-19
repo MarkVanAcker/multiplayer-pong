@@ -1,6 +1,6 @@
 package packets;
 
-public class GameStartPacket {
+public class GameStartPacket extends Packet {
 
     boolean success;
 }

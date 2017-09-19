@@ -38,6 +38,10 @@ public abstract class Entity {
         return removed;
     }
 
+    public void setChanged(boolean changed) {
+        this.changed = changed;
+    }
+
     public boolean isChanged() {
         return changed;
     }
