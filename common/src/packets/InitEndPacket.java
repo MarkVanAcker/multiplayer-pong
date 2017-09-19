@@ -2,5 +2,5 @@ package packets;
 
 public class InitEndPacket {
 
-    boolean succes;
+    public boolean succes;
 }

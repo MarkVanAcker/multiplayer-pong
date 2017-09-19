@@ -14,6 +14,7 @@ public final class EntityConversion {
         packet.position = e.getPosition();
         packet.dimension = e.getDimension();
         packet.id = e.getId();
+        //there should be a way to find the specific type of entity
         return packet;
     }
 }

@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class World {
 
-    private HashMap<Integer, Entity> entities = new HashMap<Integer, Entity>();
+    private HashMap<Long, Entity> entities = new HashMap<Long, Entity>();
 
     public World() {
 
@@ -25,7 +25,8 @@ public class World {
 
     public void remove() {
         for (Entity e : entities.values()) {
-            entities.remove(e);
+            if (e.isRemoved())
+                entities.remove(e.getId());
         }
     }
 }
