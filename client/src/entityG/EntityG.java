@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-public abstract class EntityG extends Rectangle {
+public class EntityG extends Rectangle {
 
     private Texture text;
     private long id;
