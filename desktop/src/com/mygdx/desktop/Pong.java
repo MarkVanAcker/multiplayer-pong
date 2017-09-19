@@ -1,5 +1,7 @@
 package com.mygdx.desktop;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import client.ClientGame;
@@ -17,6 +19,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import entityG.EntityG;
 
 public class Pong extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -31,6 +34,11 @@ public class Pong extends ApplicationAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
         batch = new SpriteBatch();
+        try {
+            cg = new ClientGame("localhost");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -46,12 +54,18 @@ public class Pong extends ApplicationAdapter {
         // tell the camera to update its matrices.
         camera.update();
 
-        cg.getEntities();
+        ArrayList<EntityG> sprites = cg.getEntities();
 
         // tell the SpriteBatch to render in the
         // coordinate system specified by the camera.
         batch.setProjectionMatrix(camera.combined);
-/*
+
+        batch.begin();
+        for(EntityG entity : sprites){
+            batch.draw(entity.getTexture(),entity.getX(),entity.getY(),entity.getWidth(),entity.getHeight());
+        }
+        batch.end();
+        /*
         // begin a new batch and draw the bucket and
         // all drops
         batch.begin();

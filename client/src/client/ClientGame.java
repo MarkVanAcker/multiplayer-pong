@@ -16,8 +16,9 @@ public class ClientGame implements Runnable{
     ClientProgram clientprogram;
     private Queue<EntityChangePositionPacket> queue;
 
-    ArrayList<EntityG> entities;
+    ArrayList<EntityG> entities = new ArrayList<EntityG>();
 
+    EntityG player;
 
     public ClientGame(final String hostname ) throws IOException {
         client = new Client();
