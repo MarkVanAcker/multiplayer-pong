@@ -13,6 +13,7 @@ public class ClientGame implements Runnable{
     ClientProgram clientprogram;
     private Queue<EntityChangePositionPacket> queue;
 
+    //Stage stage;
 
     public ClientGame(final String hostname ) throws IOException {
         client = new Client();
@@ -27,7 +28,19 @@ public class ClientGame implements Runnable{
     }
     @Override
     public void run() {
-        this.update();
+        long sleeptime = 1000/60;
+        long prevTime = System.nanoTime();
+
+        while (true) {
+            update(((float)(System.nanoTime() - prevTime))/1000000000);
+            prevTime = System.nanoTime();
+
+            try {
+                Thread.sleep(sleeptime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
 
     }
@@ -36,7 +49,11 @@ public class ClientGame implements Runnable{
         queue.add(e);
     }
 
-    public void update(){
+    public void update(float deltaT){
 
     }
+
+    /*
+    public Stage getStage(){}
+     */
 }

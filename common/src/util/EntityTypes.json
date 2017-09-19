@@ -1,3 +1,28 @@
 {
-
+  "ball":[
+    {
+      "name":"ball_1",
+      "filename":"URL"
+    },
+    {
+      "name":"ball_2",
+      "filename":"URL"
+    }
+  ],
+  "player":[
+    {
+      "name":"your_player",
+      "filename":"URL"
+    },
+    {
+      "name":"enemy_player",
+      "filename":"URL"
+    }
+  ],
+  "background":[
+    {
+      "name":"lava",
+      "filename":"URL"
+    }
+  ]
 }

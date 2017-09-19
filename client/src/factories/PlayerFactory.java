@@ -2,6 +2,7 @@ package factories;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import entityG.EntityG;
 
 public class PlayerFactory extends Factory {
 
@@ -12,7 +13,7 @@ public class PlayerFactory extends Factory {
     }
 
     @Override
-    public void getInstance(Vector2 position, Vector2 dimension, long id, Texture texture) {
-        //return new PlayerG(position, dimension, id, texture);
+    public EntityG getInstance(Vector2 position, Vector2 dimension, long id, Texture texture) {
+        return null;
     }
 }
