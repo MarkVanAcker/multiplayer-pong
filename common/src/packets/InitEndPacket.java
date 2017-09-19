@@ -1,6 +1,6 @@
 package packets;
 
-public class InitEndPacket {
+public class InitEndPacket extends Packet {
 
-    boolean succes;
+    public boolean succes;
 }

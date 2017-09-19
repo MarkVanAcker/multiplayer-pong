@@ -2,8 +2,8 @@ package packets;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class InitEntityPacket {
+public class InitEntityPacket extends Packet {
 
-    public int id;
+    public long id;
     public Vector2 position, dimension;
 }

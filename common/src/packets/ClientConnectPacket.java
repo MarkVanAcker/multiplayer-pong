@@ -1,6 +1,6 @@
 package packets;
 
-public class ClientConnectPacket {
+public class ClientConnectPacket extends Packet {
 
     public int id;
 }

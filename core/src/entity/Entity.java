@@ -4,9 +4,21 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity {
 
+    public static long nextId = 0;
+
     protected Vector2 position, dimension;
-    protected int id;
+    protected final long id;
     protected boolean removed, changed;
+
+    public Entity() {
+        this.id = getNextId();
+    }
+
+    public Entity(Vector2 position, Vector2 dimension) {
+        this();
+        this.position = position;
+        this.dimension = dimension;
+    }
 
     public abstract void update(float deltaT);
 
@@ -18,7 +30,7 @@ public abstract class Entity {
         return dimension;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -26,7 +38,15 @@ public abstract class Entity {
         return removed;
     }
 
+    public void setChanged(boolean changed) {
+        this.changed = changed;
+    }
+
     public boolean isChanged() {
         return changed;
+    }
+
+    public long getNextId() {
+        return nextId++;
     }
 }

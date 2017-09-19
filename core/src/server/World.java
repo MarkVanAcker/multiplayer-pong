@@ -1,15 +1,19 @@
 package server;
 
 import entity.Entity;
+import packets.EntityChangePositionPacket;
+import util.EntityConversion;
 
 import java.util.HashMap;
 
 public class World {
 
-    private HashMap<Integer, Entity> entities = new HashMap<Integer, Entity>();
+    private HashMap<Long, Entity> entities = new HashMap<Long, Entity>();
 
-    public World() {
+    private Game game;
 
+    public World(Game game) {
+        this.game = game;
     }
 
     public void addEntity(Entity e) {
@@ -20,12 +24,22 @@ public class World {
         for (Entity e : entities.values()) {
             e.update(deltaT);
         }
+
+        for (Entity e : entities.values()) {
+            if (e.isChanged()) {
+                EntityChangePositionPacket packet = EntityConversion.convertEntityToChangePositionPacket(e);
+
+                e.setChanged(false);
+            }
+        }
+
         remove();
     }
 
     public void remove() {
         for (Entity e : entities.values()) {
-            entities.remove(e);
+            if (e.isRemoved())
+                entities.remove(e.getId());
         }
     }
 }
