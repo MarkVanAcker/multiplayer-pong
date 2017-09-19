@@ -1,6 +1,6 @@
 package client;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 import entityG.EntityG;
 import packets.InitEntityPacket;
 import util.json.Json;

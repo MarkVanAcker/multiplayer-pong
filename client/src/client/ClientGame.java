@@ -1,10 +1,13 @@
 package client;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.esotericsoftware.kryonet.Client;
+import entityG.EntityG;
 import packets.EntityChangePositionPacket;
 import util.Register;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Queue;
 
 public class ClientGame implements Runnable{
@@ -12,6 +15,8 @@ public class ClientGame implements Runnable{
     Client client;
     ClientProgram clientprogram;
     private Queue<EntityChangePositionPacket> queue;
+
+    ArrayList<EntityG> entities;
 
 
     public ClientGame(final String hostname ) throws IOException {
@@ -38,5 +43,9 @@ public class ClientGame implements Runnable{
 
     public void update(){
 
+    }
+
+    public ArrayList<EntityG> getEntities() {
+        return entities;
     }
 }
