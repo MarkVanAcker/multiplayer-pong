@@ -20,12 +20,13 @@ public final class EntityConversion {
 
     //All factories hardcoded
 
-    private static HashMap<String, Factory> factories;
+    private static HashMap<String, Factory> factories = new HashMap<>();
 
     private EntityConversion() { }
 
     public static EntityG convertInitEntityToEntity(InitEntityPacket packet) {
-        return factories.get(packet.type).getInstance(packet.position, packet.dimension, packet.id);
+        return factories.get(packet.type).
+                getInstance(packet.position, packet.dimension, packet.id);
     }
 
     //TODO: return type should probably be EntityG
@@ -36,7 +37,6 @@ public final class EntityConversion {
     public static void init() {
         JsonObject types = EntityTypesInit.getEntityTypes();
         //this is ugly hihi
-        System.out.println(types.get("ball").asArray().get(0).asObject().get("filename").asString());
         factories.put(types.get("ball").asArray().get(0).asObject().get("name").asString(),
                 new BallFactory(new Texture(types.get("ball").asArray().get(0).asObject().get("filename").asString())));
     }

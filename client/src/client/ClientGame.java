@@ -1,39 +1,41 @@
 package client;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.esotericsoftware.kryonet.Client;
 import entityG.EntityG;
 import packets.EntityChangePositionPacket;
+import packets.Packet;
 import util.Register;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Queue;
+import java.util.*;
 
 public class ClientGame implements Runnable{
 
     Client client;
     ClientProgram clientprogram;
-    private Queue<EntityChangePositionPacket> queue;
+    private Queue<EntityChangePositionPacket> changePositionQueue = new LinkedList<EntityChangePositionPacket>();
 
     private final HashMap<Long, EntityG> entities = new HashMap<>();
 
     EntityG player;
 
     public ClientGame(final String hostname ) throws IOException {
+        EntityConversion.init();
+
         client = new Client();
         clientprogram = new ClientProgram(this);
         client.addListener(clientprogram);
         client.start();
-        EntityG e = new EntityG(new Vector2(100,100),new Vector2(100,100),1,new Texture("assets/pic2.png"));
-        entities.put(e.getId(), e);
+        Texture t = new Texture("client/assets/pic2.png");
+        /*EntityG e = new EntityG(new Vector2(100,100),new Vector2(100,100),1, t);
+        entities.put(e.getId(), e);*/
         Register.register(client);
         client.connect(5000,hostname,Register.port,Register.port);
-
-        EntityConversion.init();
 
         new Thread(this).start();
     }
@@ -57,14 +59,28 @@ public class ClientGame implements Runnable{
 
     }
 
+    public void sendPacketTCP(Packet packet) {
+        client.sendTCP(packet);
+    }
+
+    public void sendPacketUDP(Packet packet) {
+        client.sendUDP(packet);
+    }
+
     public void addToEntityQueue(EntityChangePositionPacket e){
-        queue.add(e);
+        changePositionQueue.add(e);
     }
 
     public void update(float deltaT){
         //analyze queue
         //update
         //send keyboard info
+
+        //TODO: should this be a concurretnLinkedQueue? See also in core.src.server.Game
+        while (!changePositionQueue.isEmpty()) {
+            EntityChangePositionPacket packet = changePositionQueue.poll();
+            entities.get(packet.id).setPosition(packet.position);
+        }
     }
 
     public void addEntity(EntityG e) {

@@ -59,6 +59,7 @@ public class ServerProgram extends Listener {
     @Override
     public void disconnected(Connection connection) {
         //TODO: remove someone from the game if they disconnect
-        System.out.println("Someone connected at "+connection.getID());
+        System.out.println("Someone disconnected at "+connection.getID());
+        players.remove(connection);
     }
 }

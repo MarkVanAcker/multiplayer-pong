@@ -35,8 +35,8 @@ public class Game implements Runnable {
         JsonObject entityTypes = EntityTypesInit.getEntityTypes();
 
         //create all entities: should be done in a separate class later
-        Ball ball = new Ball(new Vector2(0.0f, 0.0f), new Vector2(30, 30),
-                new Vector2(10.0f, 0.0f),
+        Ball ball = new Ball(new Vector2(100f, 100f), new Vector2(216, 326),
+                new Vector2(40.0f, 0.0f),
                 entityTypes.get("ball").asArray().get(0).asObject().get("name").asString());
         Player player1 = new Player(new Vector2(-100.0f, 0.0f),
                 new Vector2(20, 100),
@@ -78,7 +78,8 @@ public class Game implements Runnable {
     private int playersGameStartPackets = 0;
     public void incomingPlayerGameStartPacket() {
         playersGameStartPackets++;
-        if (playersGameStartPackets == 2) {
+        //TODO: this should be a 2!
+        if (playersGameStartPackets == 1) {
             new Thread(this).start();
             running = true;
         }

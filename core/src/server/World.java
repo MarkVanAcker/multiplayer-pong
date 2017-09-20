@@ -20,6 +20,7 @@ public class World {
     }
 
     public void update(float deltaT) {
+
         for (Entity e : entities.values()) {
             e.update(deltaT);
         }
@@ -27,7 +28,7 @@ public class World {
         for (Entity e : entities.values()) {
             if (e.isChanged()) {
                 EntityChangePositionPacket packet = EntityConversion.convertEntityToChangePositionPacket(e);
-
+                game.sendPacketToAllPlayersUDP(packet);
                 e.setChanged(false);
             }
         }
