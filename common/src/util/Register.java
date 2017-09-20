@@ -1,5 +1,6 @@
 package util;
 
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import packets.*;
@@ -20,5 +21,7 @@ public final class Register {
         kryo.register(InitEndPacket.class);
         kryo.register(InitEntityPacket.class);
         kryo.register(PlayerKeyboardPacket.class);
+        kryo.register(InitPlayerPacket.class);
+        kryo.register(Vector2.class);
     }
 }

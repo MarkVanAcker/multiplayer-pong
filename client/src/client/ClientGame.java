@@ -10,6 +10,7 @@ import util.Register;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Queue;
 
 public class ClientGame implements Runnable{
@@ -18,7 +19,7 @@ public class ClientGame implements Runnable{
     ClientProgram clientprogram;
     private Queue<EntityChangePositionPacket> queue;
 
-    ArrayList<EntityG> entities = new ArrayList<EntityG>();
+    private final HashMap<Long, EntityG> entities = new HashMap<>();
 
     EntityG player;
 
@@ -27,16 +28,31 @@ public class ClientGame implements Runnable{
         clientprogram = new ClientProgram(this);
         client.addListener(clientprogram);
         client.start();
-        EntityG e = new EntityG(new Vector2(100,100),new Vector2(100,100),1,new Texture("client/src/client/pic2.png"));
-        entities.add(e);
+        EntityG e = new EntityG(new Vector2(100,100),new Vector2(100,100),1,new Texture("assets/pic2.png"));
+        entities.put(e.getId(), e);
         Register.register(client);
         client.connect(5000,hostname,Register.port,Register.port);
+
+        EntityConversion.init();
 
         new Thread(this).start();
     }
     @Override
     public void run() {
-        this.update();
+
+        long sleeptime = 1000/60;
+        long prevTime = System.nanoTime();
+
+        while (true) {
+            update(((float)(System.nanoTime() - prevTime))/1000000000);
+            prevTime = System.nanoTime();
+
+            try {
+                Thread.sleep(sleeptime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
 
     }
@@ -45,11 +61,17 @@ public class ClientGame implements Runnable{
         queue.add(e);
     }
 
-    public void update(){
-
+    public void update(float deltaT){
+        //analyze queue
+        //update
+        //send keyboard info
     }
 
-    public ArrayList<EntityG> getEntities() {
+    public void addEntity(EntityG e) {
+        entities.put(e.getId(), e);
+    }
+
+    public HashMap<Long, EntityG> getEntities() {
         return entities;
     }
 }

@@ -40,9 +40,10 @@ public class ServerProgram extends Listener {
 
         System.out.println("Someone connected at "+connection.getID());
 
-        if (players.size() == 2) {
+        //TODO: should be a 2!
+        if (players.size() == 1) {
             //start the game
-            game.initGame(players.get(0), players.get(1));
+            game.initGame(players.get(0), null);
         }
     }
 

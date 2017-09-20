@@ -2,6 +2,7 @@ package com.mygdx.desktop;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import client.ClientGame;
@@ -54,14 +55,14 @@ public class Pong extends ApplicationAdapter {
         // tell the camera to update its matrices.
         camera.update();
 
-        ArrayList<EntityG> sprites = cg.getEntities();
+        HashMap<Long, EntityG> sprites = cg.getEntities();
 
         // tell the SpriteBatch to render in the
         // coordinate system specified by the camera.
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        for(EntityG entity : sprites){
+        for(EntityG entity : sprites.values()){
             batch.draw(entity.getTexture(),entity.getX(),entity.getY(),entity.getWidth(),entity.getHeight());
         }
         batch.end();

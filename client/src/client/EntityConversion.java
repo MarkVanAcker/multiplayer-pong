@@ -36,6 +36,7 @@ public final class EntityConversion {
     public static void init() {
         JsonObject types = EntityTypesInit.getEntityTypes();
         //this is ugly hihi
+        System.out.println(types.get("ball").asArray().get(0).asObject().get("filename").asString());
         factories.put(types.get("ball").asArray().get(0).asObject().get("name").asString(),
                 new BallFactory(new Texture(types.get("ball").asArray().get(0).asObject().get("filename").asString())));
     }

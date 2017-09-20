@@ -41,37 +41,37 @@ public class Game implements Runnable {
         Player player1 = new Player(new Vector2(-100.0f, 0.0f),
                 new Vector2(20, 100),
                 entityTypes.get("player").asArray().get(0).asObject().get("name").asString());
-        Player player2 = new Player(new Vector2(100.0f, 0.0f),
+        /*Player player2 = new Player(new Vector2(100.0f, 0.0f),
                 new Vector2(20, 100),
-                entityTypes.get("player").asArray().get(0).asObject().get("name").asString());
+                entityTypes.get("player").asArray().get(0).asObject().get("name").asString());*/
 
         //adds all entities to the world
         world.addEntity(ball);
         world.addEntity(player1);
-        world.addEntity(player2);
+        //world.addEntity(player2);
 
         //add connections, TODO: is this necessary?
         idToPlayerConnection.put(player1.getId(), player1Connection);
-        idToPlayerConnection.put(player2.getId(), player1Connection);
+        //idToPlayerConnection.put(player2.getId(), player1Connection);
 
         //send packets to players: should also be done somewhere else
         InitPlayerPacket player1forSelfPacket = EntityConversion.convertPlayerToInitPacket(player1);
         InitEntityPacket player1forOtherPacket = EntityConversion.convertEntityToInitPacket(player1);
-        InitEntityPacket player2forOtherPacket = EntityConversion.convertEntityToInitPacket(player2);
-        InitPlayerPacket player2forSelfPacket = EntityConversion.convertPlayerToInitPacket(player2);
+        //InitEntityPacket player2forOtherPacket = EntityConversion.convertEntityToInitPacket(player2);
+        //InitPlayerPacket player2forSelfPacket = EntityConversion.convertPlayerToInitPacket(player2);
         InitEntityPacket ballPacket = EntityConversion.convertEntityToInitPacket(ball);
 
-        player1Connection.sendTCP(player1forSelfPacket);
-        player1Connection.sendTCP(player2forOtherPacket);
+        //player1Connection.sendTCP(player1forSelfPacket);
+        //player1Connection.sendTCP(player2forOtherPacket);
         player1Connection.sendTCP(ballPacket);
-        player2Connection.sendTCP(player1forOtherPacket);
+        /*player2Connection.sendTCP(player1forOtherPacket);
         player2Connection.sendTCP(player2forSelfPacket);
-        player2Connection.sendTCP(ballPacket);
+        player2Connection.sendTCP(ballPacket);*/
 
         InitEndPacket endPacket = new InitEndPacket();
         endPacket.succes = true;
         player1Connection.sendTCP(endPacket);
-        player2Connection.sendTCP(endPacket);
+        //player2Connection.sendTCP(endPacket);
     }
 
     //starts the game
