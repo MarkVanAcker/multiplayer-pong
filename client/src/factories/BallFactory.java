@@ -7,14 +7,12 @@ import entityG.EntityG;
 
 public class BallFactory extends Factory{
 
-    Texture texture;
-
     public BallFactory(Texture texture) {
-        this.texture = texture;
+        super(texture);
     }
 
     @Override
-    public BallG getInstance(Vector2 position, Vector2 dimension, long id, Texture texture) {
+    public BallG getInstance(Vector2 position, Vector2 dimension, long id) {
         return new BallG(position, dimension, id, texture);
     }
 }

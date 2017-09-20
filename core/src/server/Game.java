@@ -5,6 +5,8 @@ import com.esotericsoftware.kryonet.Connection;
 import entity.Ball;
 import entity.Player;
 import packets.*;
+import util.EntityTypesInit;
+import util.json.JsonObject;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -29,14 +31,27 @@ public class Game implements Runnable {
 
     //creates the world and starts the game
     public void initGame(Connection player1Connection, Connection player2Connection) {
+        //Get the EntityTypes JsonObject to find names for the entities we are interested in
+        JsonObject entityTypes = EntityTypesInit.getEntityTypes();
+
         //create all entities: should be done in a separate class later
-        Ball ball = new Ball(new Vector2(0.0f, 0.0f), new Vector2(30, 30), new Vector2(10.0f, 0.0f), "ball");
+        Ball ball = new Ball(new Vector2(0.0f, 0.0f), new Vector2(30, 30),
+                new Vector2(10.0f, 0.0f),
+                entityTypes.get("ball").asArray().get(0).asObject().get("name").asString());
+        Player player1 = new Player(new Vector2(-100.0f, 0.0f),
+                new Vector2(20, 100),
+                entityTypes.get("player").asArray().get(0).asObject().get("name").asString());
+        Player player2 = new Player(new Vector2(100.0f, 0.0f),
+                new Vector2(20, 100),
+                entityTypes.get("player").asArray().get(0).asObject().get("name").asString());
+
+        //adds all entities to the world
         world.addEntity(ball);
-        Player player1 = new Player(new Vector2(-100.0f, 0.0f), new Vector2(20, 100), "player_1");
         world.addEntity(player1);
-        idToPlayerConnection.put(player1.getId(), player1Connection);
-        Player player2 = new Player(new Vector2(100.0f, 0.0f), new Vector2(20, 100), "player_2");
         world.addEntity(player2);
+
+        //add connections, TODO: is this necessary?
+        idToPlayerConnection.put(player1.getId(), player1Connection);
         idToPlayerConnection.put(player2.getId(), player1Connection);
 
         //send packets to players: should also be done somewhere else

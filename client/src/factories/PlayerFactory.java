@@ -6,14 +6,12 @@ import entityG.EntityG;
 
 public class PlayerFactory extends Factory {
 
-    Texture texture;
-
     public PlayerFactory(Texture texture) {
-        this.texture = texture;
+        super(texture);
     }
 
     @Override
-    public EntityG getInstance(Vector2 position, Vector2 dimension, long id, Texture texture) {
+    public EntityG getInstance(Vector2 position, Vector2 dimension, long id) {
         return null;
     }
 }

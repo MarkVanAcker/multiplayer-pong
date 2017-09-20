@@ -6,4 +6,5 @@ public class InitEntityPacket extends Packet {
 
     public long id;
     public Vector2 position, dimension;
+    public String type;
 }

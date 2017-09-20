@@ -6,5 +6,14 @@ import entityG.EntityG;
 
 public abstract class Factory {
 
-    public abstract EntityG getInstance(Vector2 position, Vector2 dimension, long id, Texture texture);
+    protected final Texture texture;
+
+    public Factory(Texture texture) { this.texture = texture; }
+
+    //TODO: save Texture or filepath to a texture and then have EntityG save the texture
+    public abstract EntityG getInstance(Vector2 position, Vector2 dimension, long id);
+
+    public Texture getTexture() {
+        return texture;
+    }
 }

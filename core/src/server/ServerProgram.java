@@ -38,6 +38,8 @@ public class ServerProgram extends Listener {
         //TODO: if more players join, send something
         players.add(connection);
 
+        System.out.println("Someone connected at "+connection.getID());
+
         if (players.size() == 2) {
             //start the game
             game.initGame(players.get(0), players.get(1));
@@ -55,6 +57,7 @@ public class ServerProgram extends Listener {
 
     @Override
     public void disconnected(Connection connection) {
-
+        //TODO: remove someone from the game if they disconnect
+        System.out.println("Someone connected at "+connection.getID());
     }
 }

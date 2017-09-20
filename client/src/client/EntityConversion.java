@@ -1,8 +1,12 @@
 package client;
 
+import com.badlogic.gdx.graphics.Texture;
 import entityG.EntityG;
+import factories.BallFactory;
 import factories.Factory;
 import packets.InitEntityPacket;
+import packets.InitPlayerPacket;
+import util.EntityTypesInit;
 import util.json.Json;
 import util.json.JsonObject;
 import util.json.JsonValue;
@@ -16,43 +20,23 @@ public final class EntityConversion {
 
     //All factories hardcoded
 
-    public static void main(String[] args) {
-        try {
-            init();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static final String typesFileName = "common/src/util/EntityTypes.json";
-
-    private static JsonObject entityTypes;
     private static HashMap<String, Factory> factories;
 
     private EntityConversion() { }
 
     public static EntityG convertInitEntityToEntity(InitEntityPacket packet) {
+        return factories.get(packet.type).getInstance(packet.position, packet.dimension, packet.id);
+    }
 
+    //TODO: return type should probably be EntityG
+    public static EntityG convertInitPlayerToPlayer(InitPlayerPacket packet) {
         return null;
     }
 
-    public static void init() throws IOException{
-        BufferedReader reader = new BufferedReader(new FileReader(typesFileName));
-        StringBuilder stringBuilder = new StringBuilder();
-        String line = null;
-        String ls = System.getProperty("line.separator");
-        while ((line = reader.readLine()) != null) {
-            stringBuilder.append(line);
-            stringBuilder.append(ls);
-        }
-        // delete the last new line separator
-        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-        reader.close();
-
-        String content = stringBuilder.toString();
-
-        entityTypes = Json.parse(content).asObject();
-
-        //System.out.println(entityTypes.get("ball").asArray().get(0).asObject().get("name").asString());
+    public static void init() {
+        JsonObject types = EntityTypesInit.getEntityTypes();
+        //this is ugly hihi
+        factories.put(types.get("ball").asArray().get(0).asObject().get("name").asString(),
+                new BallFactory(new Texture(types.get("ball").asArray().get(0).asObject().get("filename").asString())));
     }
 }
