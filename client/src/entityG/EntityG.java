@@ -11,6 +11,7 @@ public class EntityG extends Rectangle {
 
     private Texture text;
     private long id;
+    private long lastUpdate;
 
     public EntityG(Vector2 pos, Vector2 dim, long id, Texture text){
 
@@ -21,6 +22,14 @@ public class EntityG extends Rectangle {
         this.text = text;
         this.id = id;
 
+        lastUpdate = Long.MIN_VALUE;
+    }
+
+    public void updatePosition(Vector2 position, long time) {
+        if (lastUpdate < time) {
+            this.setPosition(position);
+            lastUpdate = time;
+        }
     }
 
     public Texture getTexture() {
@@ -29,5 +38,13 @@ public class EntityG extends Rectangle {
 
     public long getId() {
         return id;
+    }
+
+    public long getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(long lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

@@ -28,6 +28,7 @@ public class World {
         for (Entity e : entities.values()) {
             if (e.isChanged()) {
                 EntityChangePositionPacket packet = EntityConversion.convertEntityToChangePositionPacket(e);
+                packet.time = System.currentTimeMillis();
                 game.sendPacketToAllPlayersUDP(packet);
                 e.setChanged(false);
             }

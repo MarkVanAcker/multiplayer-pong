@@ -4,10 +4,7 @@ import client.ClientGame;
 import com.badlogic.gdx.Game;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import packets.EntityChangePositionPacket;
-import packets.GameStartPacket;
-import packets.InitEndPacket;
-import packets.InitEntityPacket;
+import packets.*;
 
 public class ClientProgram extends Listener {
 
@@ -24,9 +21,12 @@ public class ClientProgram extends Listener {
         if(o instanceof EntityChangePositionPacket){
             EntityChangePositionPacket e = (EntityChangePositionPacket)o;
             clientgame.addToEntityQueue(e);
-        }else if(o instanceof InitEntityPacket){
-            InitEntityPacket e = (InitEntityPacket)o;
+        }else if(o instanceof InitEntityPacket) {
+            InitEntityPacket e = (InitEntityPacket) o;
             clientgame.addEntity(EntityConversion.convertInitEntityToEntity(e));
+        } else if (o instanceof InitPlayerPacket) {
+            InitPlayerPacket p = (InitPlayerPacket) o;
+            clientgame.addEntity(EntityConversion.convertInitPlayerToPlayer(p));
         } else if(o instanceof InitEndPacket) {
             GameStartPacket packet = new GameStartPacket();
             packet.success = true;

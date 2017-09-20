@@ -36,13 +36,13 @@ public class Game implements Runnable {
 
         //create all entities: should be done in a separate class later
         Ball ball = new Ball(new Vector2(100f, 100f), new Vector2(216, 326),
-                new Vector2(40.0f, 0.0f),
+                new Vector2(100.0f, 0.0f),
                 entityTypes.get("ball").asArray().get(0).asObject().get("name").asString());
-        Player player1 = new Player(new Vector2(-100.0f, 0.0f),
+        Player player1 = new Player(new Vector2(50f, 50f),
                 new Vector2(20, 100),
                 entityTypes.get("player").asArray().get(0).asObject().get("name").asString());
         /*Player player2 = new Player(new Vector2(100.0f, 0.0f),
-                new Vector2(20, 100),
+                new Vector2(500, 100),
                 entityTypes.get("player").asArray().get(0).asObject().get("name").asString());*/
 
         //adds all entities to the world
@@ -61,7 +61,7 @@ public class Game implements Runnable {
         //InitPlayerPacket player2forSelfPacket = EntityConversion.convertPlayerToInitPacket(player2);
         InitEntityPacket ballPacket = EntityConversion.convertEntityToInitPacket(ball);
 
-        //player1Connection.sendTCP(player1forSelfPacket);
+        player1Connection.sendTCP(player1forSelfPacket);
         //player1Connection.sendTCP(player2forOtherPacket);
         player1Connection.sendTCP(ballPacket);
         /*player2Connection.sendTCP(player1forOtherPacket);
@@ -114,7 +114,7 @@ public class Game implements Runnable {
 
         //1s = 1 000 000 000 nanos
 
-        long sleeptime = 1000/60;
+        long sleeptime = 1000/120;
         long prevTime = System.nanoTime();
 
         while (running) {

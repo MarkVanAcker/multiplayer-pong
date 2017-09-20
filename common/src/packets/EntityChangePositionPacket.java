@@ -6,4 +6,5 @@ public class EntityChangePositionPacket extends Packet {
 
     public long id;
     public Vector2 position;
+    public long time;
 }

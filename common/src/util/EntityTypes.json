@@ -12,7 +12,7 @@
   "player":[
     {
       "name":"your_player",
-      "filename":"URL"
+      "filename":"client/assets/QR.png"
     },
     {
       "name":"enemy_player",

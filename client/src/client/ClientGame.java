@@ -1,5 +1,6 @@
 package client;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
@@ -14,11 +15,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class ClientGame implements Runnable{
+public class ClientGame implements Runnable {
 
     Client client;
     ClientProgram clientprogram;
-    private Queue<EntityChangePositionPacket> changePositionQueue = new LinkedList<EntityChangePositionPacket>();
+    private Queue<EntityChangePositionPacket> changePositionQueue = new LinkedList<>();
 
     private final HashMap<Long, EntityG> entities = new HashMap<>();
 
@@ -42,7 +43,7 @@ public class ClientGame implements Runnable{
     @Override
     public void run() {
 
-        long sleeptime = 1000/60;
+        long sleeptime = 1000/120;
         long prevTime = System.nanoTime();
 
         while (true) {
@@ -72,6 +73,7 @@ public class ClientGame implements Runnable{
     }
 
     public void update(float deltaT){
+        //predict
         //analyze queue
         //update
         //send keyboard info
@@ -79,7 +81,7 @@ public class ClientGame implements Runnable{
         //TODO: should this be a concurretnLinkedQueue? See also in core.src.server.Game
         while (!changePositionQueue.isEmpty()) {
             EntityChangePositionPacket packet = changePositionQueue.poll();
-            entities.get(packet.id).setPosition(packet.position);
+            entities.get(packet.id).updatePosition(packet.position, packet.time);
         }
     }
 
