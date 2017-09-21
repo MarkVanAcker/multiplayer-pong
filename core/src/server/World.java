@@ -94,12 +94,12 @@ public class World {
         if(dx <= dy){
             if(movableobj.getPosition().x < collobj.getPosition().x){
                 movableobj.getPosition().add(-moveAmount,0);
-                collobj.getPosition().add(moveAmount,0);
+                collobj.getPosition().add(dx - moveAmount,0);
                 movdir = CollisionDirection.LEFT;
                 colldir = CollisionDirection.RIGHT;
             }else{
                 movableobj.getPosition().add(moveAmount,0);
-                collobj.getPosition().add(-moveAmount,0);
+                collobj.getPosition().add(-dx+moveAmount,0);
                 movdir = CollisionDirection.RIGHT;
                 colldir = CollisionDirection.LEFT;
             }
@@ -107,12 +107,12 @@ public class World {
         if(dy <= dx){
             if(movableobj.getPosition().y < collobj.getPosition().y){
                 movableobj.getPosition().add(0,-moveAmount);
-                collobj.getPosition().add(0,moveAmount);
+                collobj.getPosition().add(0,dy-moveAmount);
                 movdir = CollisionDirection.DOWN;
                 colldir = CollisionDirection.UP;
             }else{
                 movableobj.getPosition().add(0,moveAmount);
-                collobj.getPosition().add(0,-moveAmount);
+                collobj.getPosition().add(0,-dy+moveAmount);
                 movdir = CollisionDirection.UP;
                 colldir = CollisionDirection.DOWN;
             }
