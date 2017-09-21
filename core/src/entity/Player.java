@@ -1,6 +1,7 @@
 package entity;
 
 import com.badlogic.gdx.math.Vector2;
+import server.World;
 
 public class Player extends Entity {
 
@@ -24,4 +25,21 @@ public class Player extends Entity {
     public void setSpeed(float speed) {
         this.speed = speed;
     }
+
+    public String getType(){
+        return TypePlayer;
+    }
+
+    @Override
+    public boolean isMovable(){
+        return false;
+    }
+
+    @Override
+    public void handleCollision(Entity e, World.CollisionDirection dir){
+
+    }
+
+
+
 }

@@ -1,6 +1,7 @@
 package entity;
 
 import com.badlogic.gdx.math.Vector2;
+import server.World;
 
 public abstract class Entity {
 
@@ -10,6 +11,10 @@ public abstract class Entity {
     protected final long id;
     protected boolean removed, changed;
     protected String typeId;
+
+    public static final String TypePlayer = "player";
+
+    public static final String TypeBall = "ball";
 
     public Entity() {
         this.id = getNextId();
@@ -60,4 +65,10 @@ public abstract class Entity {
     public String getTypeId() {
         return typeId;
     }
+
+    public abstract String getType();
+
+    public abstract boolean isMovable();
+
+    public abstract void handleCollision(Entity e, World.CollisionDirection dir);
 }

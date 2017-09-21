@@ -12,6 +12,7 @@ import util.Register;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ClientGame implements Runnable {
 
@@ -21,7 +22,7 @@ public class ClientGame implements Runnable {
 
     private PlayerKeyboardPacket inputPacket;
 
-    private Queue<EntityChangePositionPacket> changePositionQueue = new LinkedList<>();
+    private ConcurrentLinkedQueue<EntityChangePositionPacket> changePositionQueue = new ConcurrentLinkedQueue<>();
 
     private final HashMap<Long, EntityG> entities = new HashMap<>();
 
@@ -93,10 +94,12 @@ public class ClientGame implements Runnable {
         inputPacket.up = false;
         inputPacket.down = false;
 
-        //TODO: should this be a concurretnLinkedQueue? See also in core.src.server.Game
-        while (!changePositionQueue.isEmpty()) {
-            EntityChangePositionPacket packet = changePositionQueue.poll();
-            entities.get(packet.id).updatePosition(packet.position, packet.time);
+        synchronized ((changePositionQueue)) {
+            //TODO: should this be a concurretnLinkedQueue? See also in core.src.server.Game
+            while (!changePositionQueue.isEmpty()) {
+                EntityChangePositionPacket packet = changePositionQueue.poll();
+                entities.get(packet.id).updatePosition(packet.position, packet.time);
+            }
         }
     }
 
