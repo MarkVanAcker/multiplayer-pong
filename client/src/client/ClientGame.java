@@ -31,10 +31,13 @@ public class ClientGame implements Runnable {
     public ClientGame(final String hostname, Input clientInput) throws IOException {
         EntityConversion.init();
 
+
+
         this.clientInput = clientInput;
         inputPacket = new PlayerKeyboardPacket();
 
         client = new Client();
+
         clientProgram = new ClientProgram(this);
         client.addListener(clientProgram);
         client.start();
