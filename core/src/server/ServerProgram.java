@@ -9,6 +9,7 @@ import packets.PlayerKeyboardPacket;
 import util.Register;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 public class ServerProgram extends Listener {
@@ -26,11 +27,12 @@ public class ServerProgram extends Listener {
     public static void main(String[] args) throws IOException{
         server = new Server();
         Register.register(server);
-        server.bind(Register.port, Register.port);
+        server.bind(Register.tcpPort, Register.udpPort);
         server.start();
         serverProgram = new ServerProgram();
         server.addListener(serverProgram);
         System.out.println("Server is running...");
+        System.out.println(InetAddress.getLocalHost());
     }
 
     @Override

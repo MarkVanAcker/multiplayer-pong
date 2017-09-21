@@ -42,7 +42,7 @@ public class ClientGame implements Runnable {
         /*EntityG e = new EntityG(new Vector2(100,100),new Vector2(100,100),1, t);
         entities.put(e.getId(), e);*/
         Register.register(client);
-        client.connect(5000,hostname,Register.port,Register.port);
+        client.connect(5000,hostname,Register.tcpPort,Register.udpPort);
 
         new Thread(this).start();
     }

@@ -7,7 +7,8 @@ import packets.*;
 
 public final class Register {
 
-    public static final int port = 25123;
+    public static final int tcpPort = 25123;
+    public static final int udpPort = 25483;
 
     private Register() {}
 
