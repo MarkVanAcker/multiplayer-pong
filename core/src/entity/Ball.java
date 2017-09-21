@@ -5,23 +5,17 @@ import server.World;
 
 public class Ball extends Entity {
 
-    Vector2 velocity;
+    private static final float maxAngle = (float) Math.toRadians(50);
 
-    float speed;
+    Vector2 velocity;
 
     public Ball(Vector2 position, Vector2 dimension, Vector2 velocity, String typeId) {
         super(position, dimension, typeId);
         this.velocity = velocity;
-        speed = velocity.len();
     }
 
     @Override
     public void update(float deltaT) {
-        if (position.x > 400) {
-            position.x = 399;
-            velocity.x = -velocity.x;
-        }
-
         position.mulAdd(velocity, deltaT);
         changed = true;
     }
@@ -31,7 +25,7 @@ public class Ball extends Entity {
     }
 
     public String getType(){
-        return TypeBall;
+        return TYPE_BALL;
     }
 
     @Override
@@ -49,10 +43,16 @@ public class Ball extends Entity {
             System.out.println("got DIR NULL in Ball " + this.getId()  );
         }
 
-        /*if(e.getType().equals(Entity.TypePlayer) && (dir == World.CollisionDirection.LEFT || dir == World.CollisionDirection.RIGHT)){
-            float dy = (2*(this.getPosition().y + this.getDimension().y/2 - e.getPosition().y + e.getDimension().y/2))/(e.getDimension().y);
-            float angle = (float) (dy* Math.PI/3);
-            velocity.setAngleRad(angle);
-        }*/
+        if(e.getType().equals(Entity.TYPE_PLAYER)){
+            if (dir == World.CollisionDirection.LEFT) {
+                float dy = (2 * (this.getPosition().y + this.getDimension().y / 2 - e.getPosition().y - e.getDimension().y / 2)) / (e.getDimension().y);
+                float angle = (float) (dy * maxAngle);
+                velocity.setAngleRad(angle);
+            } else if (dir == World.CollisionDirection.RIGHT) {
+                float dy = (2 * (this.getPosition().y + this.getDimension().y / 2 - e.getPosition().y - e.getDimension().y / 2)) / (e.getDimension().y);
+                float angle = (float) (dy * maxAngle);
+                velocity.setAngleRad((float) (Math.PI - angle));
+            }
+        }
     }
 }

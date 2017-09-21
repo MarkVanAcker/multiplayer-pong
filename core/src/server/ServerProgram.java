@@ -35,15 +35,18 @@ public class ServerProgram extends Listener {
 
     @Override
     public void connected(Connection connection) {
-        //TODO: if more players join, send something
+        if (players.size() >= 2) {
+            //TODO: send a message back
+            return;
+        }
+
         players.add(connection);
 
         System.out.println("Someone connected at "+connection.getID());
 
-        //TODO: should be a 2!
-        if (players.size() == 1) {
+        if (players.size() == 2) {
             //start the game
-            game.initGame(players.get(0), null);
+            game.initGame(players.get(0), players.get(1));
         }
     }
 
@@ -61,5 +64,6 @@ public class ServerProgram extends Listener {
         //TODO: remove someone from the game if they disconnect
         System.out.println("Someone disconnected at "+connection.getID());
         players.remove(connection);
+        game.reset();
     }
 }

@@ -27,7 +27,7 @@ public class Player extends Entity {
     }
 
     public String getType(){
-        return TypePlayer;
+        return TYPE_PLAYER;
     }
 
     @Override

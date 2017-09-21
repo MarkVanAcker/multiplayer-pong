@@ -12,9 +12,9 @@ public abstract class Entity {
     protected boolean removed, changed;
     protected String typeId;
 
-    public static final String TypePlayer = "player";
-
-    public static final String TypeBall = "ball";
+    public static final String TYPE_PLAYER = "player";
+    public static final String TYPE_BALL = "ball";
+    public static final String TYPE_BOUNDARY = "boundary";
 
     public Entity() {
         this.id = getNextId();
@@ -46,6 +46,8 @@ public abstract class Entity {
         return id;
     }
 
+    public void remove() { removed = true; }
+
     public boolean isRemoved() {
         return removed;
     }
@@ -70,5 +72,6 @@ public abstract class Entity {
 
     public abstract boolean isMovable();
 
+    //dir says where the Entity e is compared to you: where you got hit
     public abstract void handleCollision(Entity e, World.CollisionDirection dir);
 }

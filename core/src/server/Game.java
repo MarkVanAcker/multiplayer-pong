@@ -3,6 +3,7 @@ package server;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import entity.Ball;
+import entity.Boundary;
 import entity.Entity;
 import entity.Player;
 import packets.*;
@@ -36,20 +37,26 @@ public class Game implements Runnable {
         JsonObject entityTypes = EntityTypesInit.getEntityTypes();
 
         //create all entities: should be done in a separate class later
-        Ball ball = new Ball(new Vector2(400f, 100f), new Vector2(20, 20),
-                new Vector2(-200.0f, 0.0f),
+        Ball ball = new Ball(new Vector2(400, 100f), new Vector2(20, 20),
+                new Vector2(-200, 0),
                 entityTypes.get("ball").asArray().get(0).asObject().get("name").asString());
-        Player player1 = new Player(new Vector2(50f, 50f),
+        Player player1 = new Player(new Vector2(100, 50),
                 new Vector2(20, 100),
                 entityTypes.get("player").asArray().get(0).asObject().get("name").asString());
-        /*Player player2 = new Player(new Vector2(100.0f, 0.0f),
-                new Vector2(500, 100),
-                entityTypes.get("player").asArray().get(0).asObject().get("name").asString());*/
+        Player player2 = new Player(new Vector2(680, 50),
+                new Vector2(20, 100),
+                entityTypes.get("player").asArray().get(0).asObject().get("name").asString());
+
+        //TODO: this string is empty...
+        Boundary b1 = new Boundary(new Vector2(0 - 50, 480), new Vector2(800 + 50 + 50, 100), "");
+        Boundary b2 = new Boundary(new Vector2(0 - 50, -100), new Vector2(800 + 50 + 50, 100), "");
 
         //adds all entities to the world
         world.addEntity(ball);
         world.addEntity(player1);
-        //world.addEntity(player2);
+        world.addEntity(player2);
+        world.addEntity(b1);
+        world.addEntity(b2);
 
         //add connections, TODO: is this necessary?
         //players.put(player1Connection, player1.getId());
@@ -58,21 +65,21 @@ public class Game implements Runnable {
         //send packets to players: should also be done somewhere else
         InitPlayerPacket player1forSelfPacket = EntityConversion.convertPlayerToInitPacket(player1);
         InitEntityPacket player1forOtherPacket = EntityConversion.convertEntityToInitPacket(player1);
-        //InitEntityPacket player2forOtherPacket = EntityConversion.convertEntityToInitPacket(player2);
-        //InitPlayerPacket player2forSelfPacket = EntityConversion.convertPlayerToInitPacket(player2);
+        InitEntityPacket player2forOtherPacket = EntityConversion.convertEntityToInitPacket(player2);
+        InitPlayerPacket player2forSelfPacket = EntityConversion.convertPlayerToInitPacket(player2);
         InitEntityPacket ballPacket = EntityConversion.convertEntityToInitPacket(ball);
 
         player1Connection.sendTCP(player1forSelfPacket);
-        //player1Connection.sendTCP(player2forOtherPacket);
+        player1Connection.sendTCP(player2forOtherPacket);
         player1Connection.sendTCP(ballPacket);
-        /*player2Connection.sendTCP(player1forOtherPacket);
+        player2Connection.sendTCP(player1forOtherPacket);
         player2Connection.sendTCP(player2forSelfPacket);
-        player2Connection.sendTCP(ballPacket);*/
+        player2Connection.sendTCP(ballPacket);
 
         InitEndPacket endPacket = new InitEndPacket();
         endPacket.succes = true;
         player1Connection.sendTCP(endPacket);
-        //player2Connection.sendTCP(endPacket);
+        player2Connection.sendTCP(endPacket);
     }
 
     //starts the game
@@ -80,7 +87,7 @@ public class Game implements Runnable {
     public void incomingPlayerGameStartPacket() {
         playersGameStartPackets++;
         //TODO: this should be a 2!
-        if (playersGameStartPackets == 1) {
+        if (playersGameStartPackets == 2) {
             new Thread(this).start();
             running = true;
         }
@@ -89,6 +96,10 @@ public class Game implements Runnable {
     public void addPlayerKeyboardPacket(PlayerKeyboardPacket packet) {
         if (running)
             playerKeyboards.add(packet);
+    }
+
+    public void reset() {
+        running = false;
     }
 
     private static final Vector2 up = new Vector2(0, 1);
@@ -136,5 +147,7 @@ public class Game implements Runnable {
                 e.printStackTrace();
             }
         }
+
+        world.reset();
     }
 }

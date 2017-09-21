@@ -29,8 +29,6 @@ public class World {
             e.update(deltaT);
         }
 
-
-
         for(Entity e: entities.values()){
             if(e.isMovable()){
                 for(Entity i: entities.values()){
@@ -46,9 +44,6 @@ public class World {
             }
         }
 
-
-
-
         for (Entity e : entities.values()) {
             if (e.isChanged()) {
                 EntityChangePositionPacket packet = EntityConversion.convertEntityToChangePositionPacket(e);
@@ -58,6 +53,13 @@ public class World {
             }
         }
 
+        remove();
+    }
+
+    public void reset() {
+        for (Entity e : entities.values()) {
+            e.remove();
+        }
         remove();
     }
 
@@ -87,32 +89,33 @@ public class World {
         float dy = Math.min(movableobj.getPosition().y+movableobj.getDimension().y-collobj.getPosition().y, collobj.getPosition().y+collobj.getDimension().y-movableobj.getPosition().y);
 
 
-        float moveAmount = (collobj.isMovable()) ? dx/2 : dx;
+        float moveAmountX = (collobj.isMovable()) ? dx/2 : dx;
+        float moveAmountY = (collobj.isMovable()) ? dy/2 : dy;
 
         CollisionDirection movdir = CollisionDirection.NULL,colldir = CollisionDirection.NULL;
 
         if(dx <= dy){
             if(movableobj.getPosition().x < collobj.getPosition().x){
-                movableobj.getPosition().add(-moveAmount,0);
-                collobj.getPosition().add(dx - moveAmount,0);
+                movableobj.getPosition().add(-moveAmountX,0);
+                collobj.getPosition().add(dx - moveAmountX,0);
                 movdir = CollisionDirection.LEFT;
                 colldir = CollisionDirection.RIGHT;
             }else{
-                movableobj.getPosition().add(moveAmount,0);
-                collobj.getPosition().add(-dx+moveAmount,0);
+                movableobj.getPosition().add(moveAmountX,0);
+                collobj.getPosition().add(-dx+moveAmountX,0);
                 movdir = CollisionDirection.RIGHT;
                 colldir = CollisionDirection.LEFT;
             }
         }
         if(dy <= dx){
             if(movableobj.getPosition().y < collobj.getPosition().y){
-                movableobj.getPosition().add(0,-moveAmount);
-                collobj.getPosition().add(0,dy-moveAmount);
+                movableobj.getPosition().add(0,-moveAmountY);
+                collobj.getPosition().add(0,dy-moveAmountY);
                 movdir = CollisionDirection.DOWN;
                 colldir = CollisionDirection.UP;
             }else{
-                movableobj.getPosition().add(0,moveAmount);
-                collobj.getPosition().add(0,-dy+moveAmount);
+                movableobj.getPosition().add(0,moveAmountY);
+                collobj.getPosition().add(0,-dy+moveAmountY);
                 movdir = CollisionDirection.UP;
                 colldir = CollisionDirection.DOWN;
             }
@@ -121,7 +124,7 @@ public class World {
 
         //TODO: Diagonaal ENUM DIRECTION
 
-        movableobj.handleCollision(collobj,movdir);
-        collobj.handleCollision(movableobj,colldir);
+        movableobj.handleCollision(collobj,colldir);
+        collobj.handleCollision(movableobj,movdir);
     }
 }
