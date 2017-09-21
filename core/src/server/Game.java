@@ -38,7 +38,7 @@ public class Game implements Runnable {
 
         //create all entities: should be done in a separate class later
         Ball ball = new Ball(new Vector2(400, 100f), new Vector2(20, 20),
-                new Vector2(-200, 0),
+                new Vector2(-300, 0),
                 entityTypes.get("ball").asArray().get(0).asObject().get("name").asString());
         Player player1 = new Player(new Vector2(100, 50),
                 new Vector2(20, 100),
