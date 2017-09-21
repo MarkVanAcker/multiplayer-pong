@@ -100,6 +100,7 @@ public class Game implements Runnable {
 
     public void reset() {
         running = false;
+        playersGameStartPackets--;
     }
 
     private static final Vector2 up = new Vector2(0, 1);

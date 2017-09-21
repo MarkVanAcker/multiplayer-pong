@@ -2,12 +2,15 @@ package server;
 
 import entity.Entity;
 import packets.EntityChangePositionPacket;
+import packets.EntityRemovePacket;
+import packets.PlayerKeyboardPacket;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class World {
 
-    private final HashMap<Long, Entity> entities = new HashMap<Long, Entity>();
+    private final ConcurrentHashMap<Long, Entity> entities = new ConcurrentHashMap<Long, Entity>();
 
     private Game game;
 
@@ -25,31 +28,34 @@ public class World {
 
     public void update(float deltaT) {
 
-        for (Entity e : entities.values()) {
-            e.update(deltaT);
-        }
+        synchronized (entities) {
+            for (Entity e : entities.values()) {
+                e.update(deltaT);
+            }
 
-        for(Entity e: entities.values()){
-            if(e.isMovable()){
-                for(Entity i: entities.values()){
-                    if(i.getId() == e.getId()){
-                        continue;
-                    }else{
-                        if(checkCollision(e,i)){
-                            applyCollision(e,i);
+
+            for (Entity e : entities.values()) {
+                if (e.isMovable()) {
+                    for (Entity i : entities.values()) {
+                        if (i.getId() == e.getId()) {
+                            continue;
+                        } else {
+                            if (checkCollision(e, i)) {
+                                applyCollision(e, i);
+                            }
                         }
-                    }
 
+                    }
                 }
             }
-        }
 
-        for (Entity e : entities.values()) {
-            if (e.isChanged()) {
-                EntityChangePositionPacket packet = EntityConversion.convertEntityToChangePositionPacket(e);
-                packet.time = System.currentTimeMillis();
-                game.sendPacketToAllPlayersUDP(packet);
-                e.setChanged(false);
+            for (Entity e : entities.values()) {
+                if (e.isChanged()) {
+                    EntityChangePositionPacket packet = EntityConversion.convertEntityToChangePositionPacket(e);
+                    packet.time = System.currentTimeMillis();
+                    game.sendPacketToAllPlayersUDP(packet);
+                    e.setChanged(false);
+                }
             }
         }
 
@@ -57,16 +63,24 @@ public class World {
     }
 
     public void reset() {
-        for (Entity e : entities.values()) {
-            e.remove();
+        synchronized (entities) {
+            for (Entity e : entities.values()) {
+                e.remove();
+            }
         }
         remove();
     }
 
     public void remove() {
-        for (Entity e : entities.values()) {
-            if (e.isRemoved())
-                entities.remove(e.getId());
+        synchronized (entities) {
+            for (Entity e : entities.values()) {
+                if (e.isRemoved()) {
+                    EntityRemovePacket packet = new EntityRemovePacket();
+                    packet.id = e.getId();
+                    game.sendPacketToAllPlayersTCP(packet);
+                    entities.remove(e.getId());
+                }
+            }
         }
     }
 

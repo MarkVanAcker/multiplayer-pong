@@ -1,7 +1,5 @@
 package client;
 
-import client.ClientGame;
-import com.badlogic.gdx.Game;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import packets.*;
@@ -9,10 +7,10 @@ import packets.*;
 public class ClientProgram extends Listener {
 
 
-    ClientGame clientgame;
+    private ClientGame clientGame;
 
     ClientProgram(ClientGame cg){
-        clientgame = cg;
+        clientGame = cg;
     }
 
 
@@ -20,17 +18,20 @@ public class ClientProgram extends Listener {
     public void received(Connection connection, Object o) {
         if(o instanceof EntityChangePositionPacket){
             EntityChangePositionPacket e = (EntityChangePositionPacket)o;
-            clientgame.addToEntityQueue(e);
+            clientGame.addToEntityQueue(e);
         }else if(o instanceof InitEntityPacket) {
             InitEntityPacket e = (InitEntityPacket) o;
-            clientgame.addEntity(EntityConversion.convertInitEntityToEntity(e));
+            clientGame.addEntity(EntityConversion.convertInitEntityToEntity(e));
         } else if (o instanceof InitPlayerPacket) {
             InitPlayerPacket p = (InitPlayerPacket) o;
-            clientgame.addPlayer(EntityConversion.convertInitPlayerToPlayer(p));
+            clientGame.addPlayer(EntityConversion.convertInitPlayerToPlayer(p));
         } else if(o instanceof InitEndPacket) {
             GameStartPacket packet = new GameStartPacket();
             packet.success = true;
-            clientgame.sendPacketTCP(packet);
+            clientGame.sendPacketTCP(packet);
+        } else if (o instanceof EntityRemovePacket) {
+            long id = ((EntityRemovePacket)o).id;
+            clientGame.removeEntity(id);
         }
     }
 

@@ -107,6 +107,12 @@ public class ClientGame implements Runnable {
         entities.put(e.getId(), e);
     }
 
+    public void removeEntity(long id) {
+        synchronized (changePositionQueue) {
+            entities.remove(id);
+        }
+    }
+
     public void addPlayer(PlayerG e) {
         player = e;
         addEntity(e);
