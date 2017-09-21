@@ -36,7 +36,7 @@ public class Pong extends ApplicationAdapter {
         camera.setToOrtho(false, 800, 480);
         batch = new SpriteBatch();
         try {
-            cg = new ClientGame("localhost");
+            cg = new ClientGame("192.168.0.233");
         } catch (IOException e) {
             e.printStackTrace();
         }
