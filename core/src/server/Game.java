@@ -3,6 +3,7 @@ package server;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import entity.Ball;
+import entity.Entity;
 import entity.Player;
 import packets.*;
 import util.EntityTypesInit;
@@ -17,7 +18,7 @@ public class Game implements Runnable {
 
     private World world;
     private ServerProgram serverProgram;
-    private HashMap<Long, Connection> idToPlayerConnection = new HashMap<Long, Connection>();
+    //private HashMap<Connection, Long> players = new HashMap<Connection, Long>();
 
     //ConcurrentLinkedQueue is a thread safe implementation of  a queue
     //important: if we want to loop over this thing we need to synchronize that loop, because
@@ -51,7 +52,7 @@ public class Game implements Runnable {
         //world.addEntity(player2);
 
         //add connections, TODO: is this necessary?
-        idToPlayerConnection.put(player1.getId(), player1Connection);
+        //players.put(player1Connection, player1.getId());
         //idToPlayerConnection.put(player2.getId(), player1Connection);
 
         //send packets to players: should also be done somewhere else
@@ -90,11 +91,19 @@ public class Game implements Runnable {
             playerKeyboards.add(packet);
     }
 
+    private static final Vector2 up = new Vector2(0, 1);
+    private static final Vector2 down = new Vector2(0, -1);
     private void update(float deltaT) {
         synchronized (playerKeyboards) {
-            if (!playerKeyboards.isEmpty()) {
+            while (!playerKeyboards.isEmpty()) {
                 PlayerKeyboardPacket packet = playerKeyboards.poll();
-                //TODO: do stuff with this packet
+
+                Player player = (Player) world.getEntity(packet.id);
+
+                if (packet.up)
+                    player.addPosition(deltaT, up);
+                if (packet.down)
+                    player.addPosition(deltaT, down);
             }
         }
 

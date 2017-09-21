@@ -8,7 +8,9 @@ import java.util.Iterator;
 import client.ClientGame;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -22,11 +24,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import entityG.EntityG;
 
-public class Pong extends ApplicationAdapter {
+public class Pong extends ApplicationAdapter implements Input {
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private ClientGame cg;
-
 
     @Override
     public void create() {
@@ -36,7 +37,7 @@ public class Pong extends ApplicationAdapter {
         camera.setToOrtho(false, 800, 480);
         batch = new SpriteBatch();
         try {
-            cg = new ClientGame("192.168.0.233");
+            cg = new ClientGame("localhost", this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,6 +67,7 @@ public class Pong extends ApplicationAdapter {
             batch.draw(entity.getTexture(),entity.getX(),entity.getY(),entity.getWidth(),entity.getHeight());
         }
         batch.end();
+
         /*
         // begin a new batch and draw the bucket and
         // all drops
@@ -113,5 +115,215 @@ public class Pong extends ApplicationAdapter {
     public void dispose() {
         // dispose of all the native resources
         batch.dispose();
+    }
+
+    @Override
+    public float getAccelerometerX() {
+        return 0;
+    }
+
+    @Override
+    public float getAccelerometerY() {
+        return 0;
+    }
+
+    @Override
+    public float getAccelerometerZ() {
+        return 0;
+    }
+
+    @Override
+    public float getGyroscopeX() {
+        return 0;
+    }
+
+    @Override
+    public float getGyroscopeY() {
+        return 0;
+    }
+
+    @Override
+    public float getGyroscopeZ() {
+        return 0;
+    }
+
+    @Override
+    public int getX() {
+        return 0;
+    }
+
+    @Override
+    public int getX(int pointer) {
+        return 0;
+    }
+
+    @Override
+    public int getDeltaX() {
+        return 0;
+    }
+
+    @Override
+    public int getDeltaX(int pointer) {
+        return 0;
+    }
+
+    @Override
+    public int getY() {
+        return 0;
+    }
+
+    @Override
+    public int getY(int pointer) {
+        return 0;
+    }
+
+    @Override
+    public int getDeltaY() {
+        return 0;
+    }
+
+    @Override
+    public int getDeltaY(int pointer) {
+        return 0;
+    }
+
+    @Override
+    public boolean isTouched() {
+        return false;
+    }
+
+    @Override
+    public boolean justTouched() {
+        return false;
+    }
+
+    @Override
+    public boolean isTouched(int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean isButtonPressed(int button) {
+        return false;
+    }
+
+    @Override
+    public boolean isKeyPressed(int key) {
+        return Gdx.input.isKeyPressed(key);
+    }
+
+    @Override
+    public boolean isKeyJustPressed(int key) {
+        return false;
+    }
+
+    @Override
+    public void getTextInput(TextInputListener listener, String title, String text, String hint) {
+
+    }
+
+    @Override
+    public void setOnscreenKeyboardVisible(boolean visible) {
+
+    }
+
+    @Override
+    public void vibrate(int milliseconds) {
+
+    }
+
+    @Override
+    public void vibrate(long[] pattern, int repeat) {
+
+    }
+
+    @Override
+    public void cancelVibrate() {
+
+    }
+
+    @Override
+    public float getAzimuth() {
+        return 0;
+    }
+
+    @Override
+    public float getPitch() {
+        return 0;
+    }
+
+    @Override
+    public float getRoll() {
+        return 0;
+    }
+
+    @Override
+    public void getRotationMatrix(float[] matrix) {
+
+    }
+
+    @Override
+    public long getCurrentEventTime() {
+        return 0;
+    }
+
+    @Override
+    public void setCatchBackKey(boolean catchBack) {
+
+    }
+
+    @Override
+    public boolean isCatchBackKey() {
+        return false;
+    }
+
+    @Override
+    public void setCatchMenuKey(boolean catchMenu) {
+
+    }
+
+    @Override
+    public boolean isCatchMenuKey() {
+        return false;
+    }
+
+    @Override
+    public void setInputProcessor(InputProcessor processor) {
+
+    }
+
+    @Override
+    public InputProcessor getInputProcessor() {
+        return null;
+    }
+
+    @Override
+    public boolean isPeripheralAvailable(Peripheral peripheral) {
+        return false;
+    }
+
+    @Override
+    public int getRotation() {
+        return 0;
+    }
+
+    @Override
+    public Orientation getNativeOrientation() {
+        return null;
+    }
+
+    @Override
+    public void setCursorCatched(boolean catched) {
+
+    }
+
+    @Override
+    public boolean isCursorCatched() {
+        return false;
+    }
+
+    @Override
+    public void setCursorPosition(int x, int y) {
+
     }
 }

@@ -2,6 +2,7 @@ package client;
 
 import com.badlogic.gdx.graphics.Texture;
 import entityG.EntityG;
+import entityG.PlayerG;
 import factories.BallFactory;
 import factories.Factory;
 import factories.PlayerFactory;
@@ -31,8 +32,8 @@ public final class EntityConversion {
     }
 
     //TODO: return type should probably be EntityG
-    public static EntityG convertInitPlayerToPlayer(InitPlayerPacket packet) {
-        return factories.get(packet.type).
+    public static PlayerG convertInitPlayerToPlayer(InitPlayerPacket packet) {
+        return (PlayerG) factories.get(packet.type).
                 getInstance(packet.position, packet.dimension, packet.id);
     }
 

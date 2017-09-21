@@ -26,7 +26,7 @@ public class ClientProgram extends Listener {
             clientgame.addEntity(EntityConversion.convertInitEntityToEntity(e));
         } else if (o instanceof InitPlayerPacket) {
             InitPlayerPacket p = (InitPlayerPacket) o;
-            clientgame.addEntity(EntityConversion.convertInitPlayerToPlayer(p));
+            clientgame.addPlayer(EntityConversion.convertInitPlayerToPlayer(p));
         } else if(o instanceof InitEndPacket) {
             GameStartPacket packet = new GameStartPacket();
             packet.success = true;

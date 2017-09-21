@@ -1,36 +1,41 @@
 package client;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.esotericsoftware.kryonet.Client;
 import entityG.EntityG;
+import entityG.PlayerG;
 import packets.EntityChangePositionPacket;
 import packets.Packet;
+import packets.PlayerKeyboardPacket;
 import util.Register;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 public class ClientGame implements Runnable {
 
     Client client;
-    ClientProgram clientprogram;
+    ClientProgram clientProgram;
+    Input clientInput;
+
+    private PlayerKeyboardPacket inputPacket;
+
     private Queue<EntityChangePositionPacket> changePositionQueue = new LinkedList<>();
 
     private final HashMap<Long, EntityG> entities = new HashMap<>();
 
-    EntityG player;
+    PlayerG player;
 
-    public ClientGame(final String hostname ) throws IOException {
+    public ClientGame(final String hostname, Input clientInput) throws IOException {
         EntityConversion.init();
 
+        this.clientInput = clientInput;
+        inputPacket = new PlayerKeyboardPacket();
+
         client = new Client();
-        clientprogram = new ClientProgram(this);
-        client.addListener(clientprogram);
+        clientProgram = new ClientProgram(this);
+        client.addListener(clientProgram);
         client.start();
         Texture t = new Texture("client/assets/pic2.png");
         /*EntityG e = new EntityG(new Vector2(100,100),new Vector2(100,100),1, t);
@@ -78,6 +83,16 @@ public class ClientGame implements Runnable {
         //update
         //send keyboard info
 
+        if (clientInput.isKeyPressed(Input.Keys.Z)) {
+            inputPacket.up = true;
+        }
+        if (clientInput.isKeyPressed(Input.Keys.S)) {
+            inputPacket.down = true;
+        }
+        sendPacketUDP(inputPacket);
+        inputPacket.up = false;
+        inputPacket.down = false;
+
         //TODO: should this be a concurretnLinkedQueue? See also in core.src.server.Game
         while (!changePositionQueue.isEmpty()) {
             EntityChangePositionPacket packet = changePositionQueue.poll();
@@ -87,6 +102,12 @@ public class ClientGame implements Runnable {
 
     public void addEntity(EntityG e) {
         entities.put(e.getId(), e);
+    }
+
+    public void addPlayer(PlayerG e) {
+        player = e;
+        addEntity(e);
+        inputPacket.id = player.getId();
     }
 
     public HashMap<Long, EntityG> getEntities() {

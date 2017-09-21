@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class World {
 
-    private HashMap<Long, Entity> entities = new HashMap<Long, Entity>();
+    private final HashMap<Long, Entity> entities = new HashMap<Long, Entity>();
 
     private Game game;
 
@@ -42,5 +42,9 @@ public class World {
             if (e.isRemoved())
                 entities.remove(e.getId());
         }
+    }
+
+    public Entity getEntity(long id) {
+        return entities.get(id);
     }
 }

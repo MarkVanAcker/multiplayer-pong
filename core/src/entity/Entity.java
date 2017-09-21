@@ -32,6 +32,11 @@ public abstract class Entity {
         return dimension;
     }
 
+    public void addPosition(Vector2 v) {
+        position.add(v);
+        changed = true;
+    }
+
     public long getId() {
         return id;
     }
