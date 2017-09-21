@@ -95,10 +95,14 @@ public class ClientGame implements Runnable {
         inputPacket.down = false;
 
         synchronized ((changePositionQueue)) {
-            //TODO: should this be a concurretnLinkedQueue? See also in core.src.server.Game
             while (!changePositionQueue.isEmpty()) {
                 EntityChangePositionPacket packet = changePositionQueue.poll();
-                entities.get(packet.id).updatePosition(packet.position, packet.time);
+                //TODO: catching a nullpointerexception and then doing nothing doesn't seem clean..
+                try {
+                    entities.get(packet.id).updatePosition(packet.position, packet.time);
+                } catch (NullPointerException e) {
+                    //ignore :)
+                }
             }
         }
     }
