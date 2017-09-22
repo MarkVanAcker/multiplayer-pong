@@ -2,10 +2,7 @@ package server;
 
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
-import entity.Ball;
-import entity.Boundary;
-import entity.Entity;
-import entity.Player;
+import entity.*;
 import packets.*;
 import util.EntityTypesInit;
 import util.json.JsonObject;
@@ -14,6 +11,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Game implements Runnable {
+
+    public static final float WIDTH = 800, HEIGHT = 480;
 
     private boolean running = false;
 
@@ -40,6 +39,9 @@ public class Game implements Runnable {
         Ball ball = new Ball(new Vector2(400, 100f), new Vector2(20, 20),
                 new Vector2(-300, 0),
                 entityTypes.get("ball").asArray().get(0).asObject().get("name").asString());
+        Ball ball2 = new Ball(new Vector2(400, 200), new Vector2(20, 20),
+                new Vector2(300, 0),
+                entityTypes.get("ball").asArray().get(0).asObject().get("name").asString());
         Player player1 = new Player(new Vector2(100, 50),
                 new Vector2(20, 100),
                 entityTypes.get("player").asArray().get(0).asObject().get("name").asString());
@@ -51,12 +53,22 @@ public class Game implements Runnable {
         Boundary b1 = new Boundary(new Vector2(0 - 50, 480), new Vector2(800 + 50 + 50, 100), "");
         Boundary b2 = new Boundary(new Vector2(0 - 50, -100), new Vector2(800 + 50 + 50, 100), "");
 
+        ScorePlatform s1 = new ScorePlatform(new Vector2(0 - 50, -50), new Vector2(50, 480 + 50 + 50), "");
+        ScorePlatform s2 = new ScorePlatform(new Vector2(800+50, -50), new Vector2(50, 480 + 50 + 50), "");
+
+        //TODO: right now there is collision with this scoreboard, maybe make this non-solid?
+        ScoreBoard sb = new ScoreBoard(new Vector2(-100, -100), new Vector2(1, 1), "", s2, s1);
+
         //adds all entities to the world
         world.addEntity(ball);
+        world.addEntity(ball2);
         world.addEntity(player1);
         world.addEntity(player2);
         world.addEntity(b1);
         world.addEntity(b2);
+        world.addEntity(s1);
+        world.addEntity(s2);
+        world.addEntity(sb);
 
         //add connections, TODO: is this necessary?
         //players.put(player1Connection, player1.getId());
@@ -68,13 +80,16 @@ public class Game implements Runnable {
         InitEntityPacket player2forOtherPacket = EntityConversion.convertEntityToInitPacket(player2);
         InitPlayerPacket player2forSelfPacket = EntityConversion.convertPlayerToInitPacket(player2);
         InitEntityPacket ballPacket = EntityConversion.convertEntityToInitPacket(ball);
+        InitEntityPacket ball2Packet = EntityConversion.convertEntityToInitPacket(ball2);
 
         player1Connection.sendTCP(player1forSelfPacket);
         player1Connection.sendTCP(player2forOtherPacket);
         player1Connection.sendTCP(ballPacket);
+        player1Connection.sendTCP(ball2Packet);
         player2Connection.sendTCP(player1forOtherPacket);
         player2Connection.sendTCP(player2forSelfPacket);
         player2Connection.sendTCP(ballPacket);
+        player2Connection.sendTCP(ball2Packet);
 
         InitEndPacket endPacket = new InitEndPacket();
         endPacket.succes = true;

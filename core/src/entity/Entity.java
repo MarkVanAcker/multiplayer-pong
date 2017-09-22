@@ -15,6 +15,8 @@ public abstract class Entity {
     public static final String TYPE_PLAYER = "player";
     public static final String TYPE_BALL = "ball";
     public static final String TYPE_BOUNDARY = "boundary";
+    public static final String TYPE_SCOREPLATFORM = "score_platform";
+    public static final String TYPE_SCOREBOARD = "score_board";
 
     public Entity() {
         this.id = getNextId();
